@@ -3,7 +3,9 @@
 # Input File
 
 1000SENTHILKUMARTN626117
+
 1001RAJKUMAR    AP754213
+
 1002MEENA       MP890213  
 
 # Expected output
