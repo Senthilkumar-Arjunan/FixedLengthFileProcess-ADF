@@ -1,0 +1,27 @@
+{
+	"name": "fl_empdata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage_DemoFL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "FixedLength_Input.txt",
+				"container": "fixed-length-demo"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

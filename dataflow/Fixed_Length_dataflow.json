@@ -1,0 +1,35 @@
+{
+	"name": "Fixed_Length_dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "fl_empdata",
+						"type": "DatasetReference"
+					},
+					"name": "EmpFixedLengthsource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_output_fixedlength",
+						"type": "DatasetReference"
+					},
+					"name": "Empsink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "empDerivedColumn"
+				},
+				{
+					"name": "SelectEmpData"
+				}
+			],
+			"script": "source(output(\n\t\tColumn_1 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> EmpFixedLengthsource\nEmpFixedLengthsource derive(emp_id = substring(Column_1, 1, 4),\n\t\temp_name = substring(Column_1, 5, 12),\n\t\tstate = substring(Column_1, 17,2),\n\t\temp_contact = substring(Column_1, 19, 6)) ~> empDerivedColumn\nempDerivedColumn select(mapColumn(\n\t\temp_id,\n\t\temp_name,\n\t\tstate,\n\t\temp_contact\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectEmpData\nSelectEmpData sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[' emp.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Empsink"
+		}
+	}
+}
